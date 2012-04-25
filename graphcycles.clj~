@@ -1,0 +1,73 @@
+;; find the cycles in a graph with a brute force search
+;; by dmead
+(ns graphcycle)
+
+
+
+;; lets get some test data....
+
+
+;; no cycle
+
+(def g1 `((1 2)
+          (2 3)
+          (1 5)))
+
+;;has a cycle
+(def g2  `((1 2)
+           (2 3)
+           (1 5)
+           (3 1)))
+
+;;also has a cycle
+(def g3  `((1 2)
+           (1 3)
+           (1 5)
+           (3 1)))
+
+
+(defn in?
+  "true if seq contains elm"
+  [seq elm]
+  (some #(= elm %) seq))
+
+(defn connection-from [node [left right]]
+  (= node left))
+
+
+(defn goes-to [ [left right]]
+  right)
+
+(defn connections-of [node edgelist]
+ (map (fn [edge] (goes-to edge))
+      (filter (fn [edge]
+                (connection-from node edge)) edgelist)))
+
+
+(defn find-cycle  [edgelist history start current ]
+  (cond (in? history current) (list 'Cycle start  (reverse  (cons current  history)))
+        (empty? edgelist) false
+        :more
+        (apply concat  (map (fn  next-level [next ]
+                              (find-cycle edgelist
+                                         (cons current history)
+                                         start next))
+                            (connections-of current edgelist)))))
+
+
+(comment
+
+
+
+  (connections-of 1 g1)
+ (find-cycle g1 nil 1 1)
+ (find-cycle g2 nil 1 1)
+ (find-cycle g3 nil 1 1)
+
+  (makeCtree  )
+
+  (makeCtree g2 nil 1 1)
+  (Cycle 1 (1 2 3 1) true)
+
+
+)
