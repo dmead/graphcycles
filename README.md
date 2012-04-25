@@ -1,4 +1,4 @@
 graphcycles
 ===========
 
-Detech cycles in a directed graph
+Detect cycles in a directed graph
